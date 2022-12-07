@@ -48,6 +48,7 @@
     <RootNamespace>Core</RootNamespace>
     <ProjectName>Core</ProjectName>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -523,6 +524,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="573Deset.h" />
+    <ClInclude Include="573DesetUltra.h" />
+    <ClInclude Include="595Lowset.h" />
     <ClInclude Include="A12Watcher.h" />
     <ClInclude Include="Ac08.h" />
     <ClInclude Include="Action53.h" />

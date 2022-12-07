@@ -7,6 +7,9 @@
 #include "RomData.h"
 #include "VirtualFile.h"
 
+#include "573Deset.h"
+#include "573DesetUltra.h"
+#include "595Lowset.h"
 #include "A65AS.h"
 #include "Ac08.h"
 #include "Action53.h"
@@ -643,6 +646,10 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 528: break; //831128C
 		case 529: return new T230();
 		case 530: return new Ax5705();
+
+		case 570: return new Lowset595();
+		case 571: return new Deset573();
+		case 572: return new Deset573Ultra();
 
 		case UnifBoards::Ac08: return new Ac08(); //mapper 42?
 		case UnifBoards::Cc21: return new Cc21();

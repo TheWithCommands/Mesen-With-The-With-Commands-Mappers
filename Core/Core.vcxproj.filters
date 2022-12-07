@@ -116,6 +116,9 @@
     <Filter Include="Nes\MemoryManager">
       <UniqueIdentifier>{13af8497-e820-43f1-9888-85797a29b551}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Nes\Mappers\The With Commands">
+      <UniqueIdentifier>{a32fd231-cf2a-45f9-90f6-6622179e845e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IAudioDevice.h">
@@ -1501,6 +1504,15 @@
     </ClInclude>
     <ClInclude Include="VbController.h">
       <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="573Deset.h">
+      <Filter>Nes\Mappers\The With Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="573DesetUltra.h">
+      <Filter>Nes\Mappers\The With Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="595Lowset.h">
+      <Filter>Nes\Mappers\The With Commands</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

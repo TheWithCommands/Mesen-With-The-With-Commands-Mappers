@@ -1,4 +1,4 @@
-[中文](https://github.com/TheWithCommands/Mesen-With-T.W.C.-Mappers/blob/master/README_CN.md)
+[中文](https://github.com/TheWithCommands/Mesen-With-The-With-Commands-Mappers/blob/master/README_CN.md)
 
 There is no change, just add the Mapper designed by myself.
 

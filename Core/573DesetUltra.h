@@ -14,14 +14,8 @@ class Deset573Ultra:public BaseMapper
     private:
         void setMirrorMode()
         {
-            if(_mirrorModeFlag)
-            {
-                SetMirroringType(_mirrorModeData?MirroringType::Vertical:MirroringType::Horizontal);
-            }
-            else
-            {
-                SetMirroringType(_mirrorModeData?MirroringType::ScreenBOnly:MirroringType::ScreenAOnly);
-            }
+            if(_mirrorModeFlag)SetMirroringType(_mirrorModeData?MirroringType::Vertical:MirroringType::Horizontal);
+            else SetMirroringType(_mirrorModeData?MirroringType::ScreenBOnly:MirroringType::ScreenAOnly);
         }
 
         void setchr()
@@ -49,18 +43,16 @@ class Deset573Ultra:public BaseMapper
         if(addr>=0xc000)
         {
             chrCache=value&0x7f;
-            setchr();
             _mirrorModeFlag=value&0x80;
-            setMirrorMode();
         }
         else
         {
             SelectPRGPage(0,value&0x1f);
             _chr0000Flag=value&0x20;
             _chr1000Flag=value&0x40;
-            setchr();
             _mirrorModeData=value&0x80;
-            setMirrorMode();
         }
+        setchr();
+        setMirrorMode();
     }
 };

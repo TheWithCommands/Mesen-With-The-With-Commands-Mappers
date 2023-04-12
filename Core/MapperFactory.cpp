@@ -268,6 +268,7 @@
 #include "VRC6.h"
 #include "VRC7.h"
 #include "VsSystem.h"
+#include "WaitWithoutCycles.h"
 #include "Waixing162.h"
 #include "Waixing164.h"
 #include "Waixing178.h"
@@ -650,6 +651,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 570: return new Lowset595();
 		case 571: return new Deset573();
 		case 572: return new Deset573Ultra();
+		case 573: return new WaitWithoutCycles();
 
 		case UnifBoards::Ac08: return new Ac08(); //mapper 42?
 		case UnifBoards::Cc21: return new Cc21();

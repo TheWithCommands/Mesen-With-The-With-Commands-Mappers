@@ -15,6 +15,21 @@ class Deset573:public BaseMapper
         SelectPRGPage(1,-1);
 
         SelectCHRPage(0,GetPowerOnByte());
+
+        switch(_romInfo.NesHeader.Byte6&0x09)
+        {
+            case 8:
+            case 9:
+            {
+                SetMirroringType(MirroringType::FourScreens);
+                break;
+            }
+            default:
+            {
+                SetMirroringType(GetPowerOnByte()%2?MirroringType::Vertical:MirroringType::Horizontal);
+                break;
+            }
+        }
     }
 
     void WriteRegister(uint16_t addr,uint8_t value) override
@@ -22,7 +37,19 @@ class Deset573:public BaseMapper
         if(value&0x40)
         {
             SelectPRGPage(0,value&0x1f);
-            SetMirroringType(value&0x20?MirroringType::Vertical:MirroringType::Horizontal);
+
+            switch(_romInfo.NesHeader.Byte6&0x09)
+            {
+                case 8:
+                case 9:
+                    break;
+            
+                default:
+                {
+                    SetMirroringType(value&0x20?MirroringType::Vertical:MirroringType::Horizontal);
+                    break;
+                }
+            }
         }
         if(value&0x80)SelectCHRPage(0,value&0x3f);
     }

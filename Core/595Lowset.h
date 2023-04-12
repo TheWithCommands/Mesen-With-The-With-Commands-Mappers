@@ -18,7 +18,50 @@ class Lowset595:public BaseMapper
         SelectPRGPage(1,-1);
 
         SelectCHRPage(0,GetPowerOnByte());
+
+        switch(_romInfo.NesHeader.Byte6&0x09)
+        {
+            case 8:
+            case 9:
+            {
+                SetMirroringType(MirroringType::FourScreens);
+                break;
+            }
+            default:
+            {
+                switch(GetPowerOnByte()%4)
+                {
+                    case 0:
+                    {
+                        SetMirroringType(MirroringType::ScreenAOnly);
+                        break;
+                    }
+                    case 1:
+                    {
+                        SetMirroringType(MirroringType::ScreenBOnly);
+                        break;
+                    }
+                    case 2:
+                    {
+                        SetMirroringType(MirroringType::Horizontal);
+                        break;
+                    }
+                    case 3:
+                    {
+                        SetMirroringType(MirroringType::Vertical);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
     }
+
+    void StreamState(bool saving) override
+	{
+		BaseMapper::StreamState(saving);
+		Stream(_595data);
+	}
 
     #define _595busSer 0x20
     #define _595busRclk 0x40
@@ -35,13 +78,25 @@ class Lowset595:public BaseMapper
         if(value&_595busRclk)
         {
             SelectCHRPage(0,_595data&0x3f);
-            if(_595data&0x80)
+
+            switch(_romInfo.NesHeader.Byte6&0x09)
             {
-                SetMirroringType(_595data&0x40?MirroringType::Vertical:MirroringType::Horizontal);
-            }
-            else
-            {
-                SetMirroringType(_595data&0x40?MirroringType::ScreenBOnly:MirroringType::ScreenAOnly);
+                case 8:
+                case 9:
+                    break;
+
+                default:
+                {
+                    if(_595data&0x80)
+                    {
+                        SetMirroringType(_595data&0x40?MirroringType::Vertical:MirroringType::Horizontal);
+                    }
+                    else
+                    {
+                        SetMirroringType(_595data&0x40?MirroringType::ScreenBOnly:MirroringType::ScreenAOnly);
+                    }
+                    break;
+                }
             }
         }
     }

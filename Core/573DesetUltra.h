@@ -91,7 +91,6 @@ class Deset573Ultra:public BaseMapper
             case 8:
             case 9:
                 break;
-
             default:
             {
                 if(_mirrorModeFlag)

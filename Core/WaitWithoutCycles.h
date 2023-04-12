@@ -105,10 +105,10 @@ class WaitWithoutCycles:public BaseMapper
                         break;
                     }
                 }
-                if(value$0x80)
+                if(value&0x80)
                 {
                     _irqEnabled=false; 
-                    irqCounter=0; 
+                    _irqCounter=0; 
                     _console->GetCpu()->ClearIrqSource(IRQSource::External);
                 }
             }

@@ -92,7 +92,6 @@ class WaitWithoutCycles:public BaseMapper
                     case 8:
                     case 9:
                         break;
-
                     default:
                     {
                         if(value&0x40)

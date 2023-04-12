@@ -5,8 +5,8 @@
 class WaitWithoutCycles:public BaseMapper
 {
     private:
-	    uint16_t _irqCounter;
-	    bool _irqEnabled;
+        uint16_t _irqCounter;
+        bool _irqEnabled;
 
     protected:
         virtual uint16_t GetPRGPageSize() override {return 0x4000;}
@@ -62,23 +62,23 @@ class WaitWithoutCycles:public BaseMapper
     }
 
     void StreamState(bool saving) override
-	{
-		BaseMapper::StreamState(saving);
-		Stream(_irqCounter,_irqEnabled);
-	}
+    {
+        BaseMapper::StreamState(saving);
+        Stream(_irqCounter,_irqEnabled);
+    }
 
     void ProcessCpuClock() override
-	{
-		if(_irqEnabled)
+    {
+        if(_irqEnabled)
         {
-			_irqCounter++;
-			if(_irqCounter==0)
+            _irqCounter++;
+            if(_irqCounter==0)
             {
-				_console->GetCpu()->SetIrqSource(IRQSource::External);
-				_irqEnabled=false;
-			}
-		}
-	}
+                _console->GetCpu()->SetIrqSource(IRQSource::External);
+                _irqEnabled=false;
+            }
+        }
+    }
 
     void WriteRegister(uint16_t addr,uint8_t value) override
     {
@@ -108,8 +108,8 @@ class WaitWithoutCycles:public BaseMapper
                 if(value$0x80)
                 {
                     _irqEnabled=false; 
-				    _irqCounter=0; 
-				    _console->GetCpu()->ClearIrqSource(IRQSource::External);
+                    irqCounter=0; 
+                    _console->GetCpu()->ClearIrqSource(IRQSource::External);
                 }
             }
             case 1:
@@ -135,13 +135,13 @@ class WaitWithoutCycles:public BaseMapper
             case 5:
             {
                 _irqCounter=(_irqCounter&0xff00)|value;
-				break;
+                break;
             }
             case 6:
             {
                 _irqCounter=(_irqCounter&0xff)|(value<<8);
-				_irqEnabled=true;
-				break;
+                _irqEnabled=true;
+                break;
             }
             case 7:break;
         }

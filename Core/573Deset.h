@@ -43,7 +43,6 @@ class Deset573:public BaseMapper
                 case 8:
                 case 9:
                     break;
-            
                 default:
                 {
                     SetMirroringType(value&0x20?MirroringType::Vertical:MirroringType::Horizontal);

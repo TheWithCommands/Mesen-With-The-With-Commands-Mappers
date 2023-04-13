@@ -107,8 +107,8 @@ class WaitWithoutCycles:public BaseMapper
                 }
                 if(value&0x80)
                 {
-                    _irqEnabled=false; 
-                    _irqCounter=0; 
+                    _irqEnabled=false;
+                    _irqCounter=0;
                     _console->GetCpu()->ClearIrqSource(IRQSource::External);
                 }
                 break;

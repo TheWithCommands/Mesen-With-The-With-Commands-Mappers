@@ -111,6 +111,7 @@ class WaitWithoutCycles:public BaseMapper
                     _irqCounter=0; 
                     _console->GetCpu()->ClearIrqSource(IRQSource::External);
                 }
+                break;
             }
             case 1:
             {

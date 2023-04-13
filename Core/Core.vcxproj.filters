@@ -1514,9 +1514,6 @@
     <ClInclude Include="595Lowset.h">
       <Filter>Nes\Mappers\The With Commands</Filter>
     </ClInclude>
-    <ClInclude Include="WaitWithoutCycles.h">
-      <Filter>Nes\Mappers\The With Commands</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -981,7 +981,6 @@
     <ClInclude Include="ScaleFilter.h" />
     <ClInclude Include="VsSystemActionManager.h" />
     <ClInclude Include="VsZapper.h" />
-    <ClInclude Include="WaitWithoutCycles.h" />
     <ClInclude Include="Waixing162.h" />
     <ClInclude Include="Waixing164.h" />
     <ClInclude Include="Waixing178.h" />

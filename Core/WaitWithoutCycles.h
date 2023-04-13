@@ -135,12 +135,14 @@ class WaitWithoutCycles:public BaseMapper
             }
             case 5:
             {
-                _irqCounter=(_irqCounter&0xff00)|value;
+                _irqCounter&=0xff00;
+                _irqCounter+=value;
                 break;
             }
             case 6:
             {
-                _irqCounter=(_irqCounter&0xff)|(value<<8);
+                _irqCounter&=0x00ff;
+                _irqCounter+=value<<8;
                 _irqEnabled=true;
                 break;
             }

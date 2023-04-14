@@ -63,10 +63,10 @@ class Deset573Ultra:public BaseMapper
     }
 
     void StreamState(bool saving) override
-	{
-		BaseMapper::StreamState(saving);
-		Stream(_chr0000Flag,_chr1000Flag,_mirrorModeFlag,_mirrorModeData,chrCache);
-	}
+    {
+        BaseMapper::StreamState(saving);
+        Stream(_chr0000Flag,_chr1000Flag,_mirrorModeFlag,_mirrorModeData,chrCache);
+    }
 
     void WriteRegister(uint16_t addr,uint8_t value) override
     {

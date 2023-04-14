@@ -6,4 +6,6 @@
 
 [573 Deset Ultra](https://oshwhub.com/the-with-commands/573-deset)，Mapper 572
 
-查看Mesen-X的Readme，请点击[此处](https://github.com/SourMesen/Mesen/blob/master/README.md)。
+T.W.C. Wait Without Cycles，Mapper 573，尚未制作出实体卡带
+
+查看Mesen的Readme，请点击[此处](https://github.com/SourMesen/Mesen/blob/master/README.md)。

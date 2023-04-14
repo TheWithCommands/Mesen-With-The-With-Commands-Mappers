@@ -8,4 +8,4 @@
 
 T.W.C. Wait Without Cycles，Mapper 573，尚未制作出实体卡带
 
-查看Mesen的Readme，请点击[此处](https://github.com/SourMesen/Mesen/blob/master/README.md)。
+查看Mesen的Readme文档，请点击[此处](https://github.com/SourMesen/Mesen/blob/master/README.md)。

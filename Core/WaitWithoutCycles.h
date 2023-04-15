@@ -86,6 +86,26 @@ class WaitWithoutCycles:public BaseMapper
         {
             case 0:
             {
+                SelectCHRPage(0,value);
+                break;
+            }
+            case 1:
+            {
+                SelectCHRPage(1,value);
+                break;
+            }
+            case 2:
+            {
+                SelectCHRPage(2,value);
+                break;
+            }
+            case 3:
+            {
+                SelectCHRPage(3,value);
+                break;
+            }
+            case 4:
+            {
                 SelectPRGPage(0,value&0x1f);
                 switch(_romInfo.NesHeader.Byte6&0x09)
                 {
@@ -111,26 +131,6 @@ class WaitWithoutCycles:public BaseMapper
                     _irqCounter=0;
                     _console->GetCpu()->ClearIrqSource(IRQSource::External);
                 }
-                break;
-            }
-            case 1:
-            {
-                SelectCHRPage(0,value);
-                break;
-            }
-            case 2:
-            {
-                SelectCHRPage(1,value);
-                break;
-            }
-            case 3:
-            {
-                SelectCHRPage(2,value);
-                break;
-            }
-            case 4:
-            {
-                SelectCHRPage(3,value);
                 break;
             }
             case 5:

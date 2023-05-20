@@ -106,7 +106,7 @@ class WaitWithoutCycles:public BaseMapper
             }
             case 4:
             {
-                SelectPRGPage(0,value&0x1f);
+                SelectPRGPage(0,value&0x3f);
                 switch(_romInfo.NesHeader.Byte6&0x09)
                 {
                     case 8:
@@ -114,22 +114,16 @@ class WaitWithoutCycles:public BaseMapper
                         break;
                     default:
                     {
-                        if(value&0x40)
+                        if(value&0x80)
                         {
-                            SetMirroringType(value&0x20?MirroringType::Vertical:MirroringType::Horizontal);
+                            SetMirroringType(value&0x40?MirroringType::Vertical:MirroringType::Horizontal);
                         }
                         else
                         {
-                            SetMirroringType(value&0x20?MirroringType::ScreenBOnly:MirroringType::ScreenAOnly);
+                            SetMirroringType(value&0x40?MirroringType::ScreenBOnly:MirroringType::ScreenAOnly);
                         }
                         break;
                     }
-                }
-                if(value&0x80)
-                {
-                    _irqEnabled=false;
-                    _irqCounter=0;
-                    _console->GetCpu()->ClearIrqSource(IRQSource::External);
                 }
                 break;
             }
@@ -144,7 +138,12 @@ class WaitWithoutCycles:public BaseMapper
                 _irqEnabled=true;
                 break;
             }
-            case 7:break;
+            case 7:
+            {
+                _irqEnabled=false;
+                _irqCounter=0;
+                _console->GetCpu()->ClearIrqSource(IRQSource::External);
+            }
         }
     }
 };

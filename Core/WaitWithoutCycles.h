@@ -6,6 +6,7 @@ class WaitWithoutCycles:public BaseMapper
 {
     private:
         uint16_t _irqCounter;
+        uint8_t _irqInput;
         bool _irqEnabled;
 
     protected:
@@ -64,7 +65,7 @@ class WaitWithoutCycles:public BaseMapper
     void StreamState(bool saving) override
     {
         BaseMapper::StreamState(saving);
-        Stream(_irqCounter,_irqEnabled);
+        Stream(_irqCounter,_irqEnabled,_irqInput);
     }
 
     void ProcessCpuClock() override
@@ -85,26 +86,6 @@ class WaitWithoutCycles:public BaseMapper
         switch(addr&7)
         {
             case 0:
-            {
-                SelectCHRPage(0,value);
-                break;
-            }
-            case 1:
-            {
-                SelectCHRPage(1,value);
-                break;
-            }
-            case 2:
-            {
-                SelectCHRPage(2,value);
-                break;
-            }
-            case 3:
-            {
-                SelectCHRPage(3,value);
-                break;
-            }
-            case 4:
             {
                 SelectPRGPage(0,value&0x3f);
                 switch(_romInfo.NesHeader.Byte6&0x09)
@@ -127,15 +108,60 @@ class WaitWithoutCycles:public BaseMapper
                 }
                 break;
             }
+
+            case 1:
+            {
+                SelectCHRPage(0,value);
+                break;
+            }
+            case 2:
+            {
+                SelectCHRPage(1,value);
+                break;
+            }
+            case 3:
+            {
+                SelectCHRPage(2,value);
+                break;
+            }
+            case 4:
+            {
+                SelectCHRPage(3,value);
+                break;
+            }
+            
             case 5:
             {
-                _irqCounter=(_irqCounter&0xff00)|value;
+                switch(value&0x03)
+                {
+                    case 0:
+                    {
+                        _irqInput=1;
+                        break;
+                    }
+                    case 1:
+                    {
+                        _irqInput=2;
+                        break;
+                    }
+                    case 2:
+                    {
+                        _irqInput=0;
+                        _irqEnabled=true;
+                        break;
+                    }
+                    default:
+                        break;
+                }
                 break;
             }
             case 6:
             {
-                _irqCounter=(_irqCounter&0xff)|(value<<8);
-                _irqEnabled=true;
+                if(_irqEnabled==false)
+                {
+                    if(_irqInput==2)_irqCounter=(_irqCounter&0xff)|(value<<8);
+                    else if(_irqInput==1)_irqCounter=(_irqCounter&0xff00)|value;
+                }
                 break;
             }
             case 7:

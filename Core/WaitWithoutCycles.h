@@ -74,11 +74,14 @@ class WaitWithoutCycles:public BaseMapper
         if(_irqEnabled)
         {
             _irqCounter++;
-            std::random_device rd;
-            std::mt19937 mt(rd());
-            std::uniform_int_distribution<> dist(0, 255);
-            if(_irqInput==1)_irqCounter=(_irqCounter&0xff00)|dist(mt);
-            else if(_irqInput==2)_irqCounter=(_irqCounter&0xff)|(dist(mt)<<8);
+            if(_irqInput)
+            {
+                std::random_device rd;
+                std::mt19937 mt(rd());
+                std::uniform_int_distribution<> dist(0, 255);
+                if(_irqInput==1)_irqCounter=(_irqCounter&0xff00)|dist(mt);
+                else if(_irqInput==2)_irqCounter=(_irqCounter&0xff)|(dist(mt)<<8);
+            }
             if(_irqCounter==0)
             {
                 _console->GetCpu()->SetIrqSource(IRQSource::External);

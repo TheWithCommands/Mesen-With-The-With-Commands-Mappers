@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include <random>
 #include "BaseMapper.h"
 
 class WaitWithoutCycles:public BaseMapper
@@ -74,14 +73,6 @@ class WaitWithoutCycles:public BaseMapper
         if(_irqEnabled)
         {
             _irqCounter++;
-            if(_irqInput)
-            {
-                std::random_device rd;
-                std::mt19937 mt(rd());
-                std::uniform_int_distribution<> dist(0, 255);
-                if(_irqInput==1)_irqCounter=(_irqCounter&0xff00)|dist(mt);
-                else if(_irqInput==2)_irqCounter=(_irqCounter&0xff)|(dist(mt)<<8);
-            }
             if(_irqCounter==0)
             {
                 _console->GetCpu()->SetIrqSource(IRQSource::External);
@@ -141,7 +132,7 @@ class WaitWithoutCycles:public BaseMapper
             
             case 5:
             {
-                switch(value&0x03)
+                if(_irqEnabled==false)switch(value&0x03)
                 {
                     case 0:
                     {

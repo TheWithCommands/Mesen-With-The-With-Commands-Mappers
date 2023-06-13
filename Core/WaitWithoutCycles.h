@@ -6,7 +6,7 @@ class WaitWithoutCycles:public BaseMapper
 {
     private:
         uint16_t _irqCounter;
-        uint8_t _irqInput;
+        uint8_t _irqInput,_irqCache;
         bool _irqRunning,_irqEnabled;
 
     protected:
@@ -65,7 +65,7 @@ class WaitWithoutCycles:public BaseMapper
     void StreamState(bool saving) override
     {
         BaseMapper::StreamState(saving);
-        Stream(_irqCounter,_irqRunning,_irqEnabled,_irqInput);
+        Stream(_irqCounter,_irqCache,_irqInput,_irqRunning,_irqEnabled);
     }
 
     void ProcessCpuClock() override
@@ -132,37 +132,40 @@ class WaitWithoutCycles:public BaseMapper
             
             case 5:
             {
-                if(_irqEnabled==false)switch(value&0x03)
+                switch(value&0x03)
                 {
                     case 0:
                     {
-                        _irqInput=1;
+                        if(_irqEnabled==false)_irqInput=1;
                         break;
                     }
                     case 1:
                     {
-                        _irqInput=2;
+                        if(_irqEnabled==false)_irqInput=2;
                         break;
                     }
                     case 2:
+                    {
+                        if(_irqEnabled==false)
+                        {
+                            if(_irqInput==1)_irqCounter=(_irqCounter&0xff00)|_irqCache;
+                            else if(_irqInput==2)_irqCounter=(_irqCounter&0xff)|(_irqCache<<8);
+                        }
+                        break;
+                    }
+                    case 3:
                     {
                         _irqInput=0;
                         _irqRunning=true;
                         _irqEnabled=true;
                         break;
                     }
-                    default:
-                        break;
                 }
                 break;
             }
             case 6:
             {
-                if(_irqEnabled==false)
-                {
-                    if(_irqInput==1)_irqCounter=(_irqCounter&0xff00)|value;
-                    else if(_irqInput==2)_irqCounter=(_irqCounter&0xff)|(value<<8);
-                }
+                if(_irqEnabled==false)_irqCache=value;
                 break;
             }
             case 7:

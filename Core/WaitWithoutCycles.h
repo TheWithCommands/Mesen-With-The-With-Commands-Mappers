@@ -6,7 +6,7 @@ class WaitWithoutCycles:public BaseMapper
 {
     private:
         uint16_t _irqCounter;
-        uint8_t _irqInput,_irqCache;
+        uint8_t _irqCache;
         bool _irqRunning,_irqEnabled;
 
     protected:
@@ -65,15 +65,15 @@ class WaitWithoutCycles:public BaseMapper
     void StreamState(bool saving) override
     {
         BaseMapper::StreamState(saving);
-        Stream(_irqCounter,_irqCache,_irqInput,_irqRunning,_irqEnabled);
+        Stream(_irqCounter,_irqCache,_irqRunning,_irqEnabled);
     }
 
     void ProcessCpuClock() override
     {
         if(_irqRunning)
         {
-            _irqCounter++;
-            if(_irqCounter==0)
+            _irqCounter--;
+            if(_irqCounter==0xffff)
             {
                 _console->GetCpu()->SetIrqSource(IRQSource::External);
                 _irqRunning=false;
@@ -132,32 +132,21 @@ class WaitWithoutCycles:public BaseMapper
             
             case 5:
             {
-                switch(value&0x03)
+                switch(value&0x01)
                 {
                     case 0:
                     {
-                        if(_irqEnabled==false)_irqInput=1;
+                        if(_irqEnabled==false)_irqCounter=(_irqCounter&0xff00)|_irqCache;
                         break;
                     }
                     case 1:
                     {
-                        if(_irqEnabled==false)_irqInput=2;
-                        break;
-                    }
-                    case 2:
-                    {
                         if(_irqEnabled==false)
                         {
-                            if(_irqInput==1)_irqCounter=(_irqCounter&0xff00)|_irqCache;
-                            else if(_irqInput==2)_irqCounter=(_irqCounter&0xff)|(_irqCache<<8);
+                            _irqCounter=(_irqCounter&0xff)|(_irqCache<<8);
+                            _irqRunning=true;
+                            _irqEnabled=true;
                         }
-                        break;
-                    }
-                    case 3:
-                    {
-                        _irqInput=0;
-                        _irqRunning=true;
-                        _irqEnabled=true;
                         break;
                     }
                 }
@@ -174,6 +163,7 @@ class WaitWithoutCycles:public BaseMapper
                 _irqEnabled=false;
                 _irqCounter=0;
                 _console->GetCpu()->ClearIrqSource(IRQSource::External);
+                break;
             }
         }
     }

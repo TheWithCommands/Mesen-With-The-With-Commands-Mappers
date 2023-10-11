@@ -129,8 +129,12 @@ class WaitWithoutCycles:public BaseMapper
                 SelectCHRPage(3,value);
                 break;
             }
-            
             case 5:
+            {
+                if(_irqEnabled==false)_irqCache=value;
+                break;
+            }
+            case 6:
             {
                 switch(value&0x01)
                 {
@@ -150,11 +154,6 @@ class WaitWithoutCycles:public BaseMapper
                         break;
                     }
                 }
-                break;
-            }
-            case 6:
-            {
-                if(_irqEnabled==false)_irqCache=value;
                 break;
             }
             case 7:

@@ -5,9 +5,10 @@
 class WaitWithoutCycles:public BaseMapper
 {
     private:
-        uint16_t _irqCounter;
-        uint8_t _irqCache;
-        bool _irqRunning,_irqEnabled;
+        uint16_t irqCounter;
+        uint8_t irqCache;
+        bool irqLowInput,irqHighInput;
+        bool irqEnabled;
 
     protected:
         virtual uint16_t GetPRGPageSize() override {return 0x4000;}
@@ -23,6 +24,12 @@ class WaitWithoutCycles:public BaseMapper
         SelectCHRPage(1,GetPowerOnByte());
         SelectCHRPage(2,GetPowerOnByte());
         SelectCHRPage(3,GetPowerOnByte());
+
+        irqCounter=(GetPowerOnByte()<<8)+GetPowerOnByte();
+        irqCache=GetPowerOnByte();
+        irqLowInput=GetPowerOnByte()%1;
+        irqHighInput=GetPowerOnByte()%1;
+        irqEnabled=GetPowerOnByte()%1;
 
         switch(_romInfo.NesHeader.Byte6&0x09)
         {
@@ -65,18 +72,21 @@ class WaitWithoutCycles:public BaseMapper
     void StreamState(bool saving) override
     {
         BaseMapper::StreamState(saving);
-        Stream(_irqCounter,_irqCache,_irqRunning,_irqEnabled);
+        Stream(irqCounter,irqCache,irqLowInput,irqHighInput,irqEnabled);
     }
 
     void ProcessCpuClock() override
     {
-        if(_irqRunning)
+        if(irqLowInput)irqCounter=(irqCounter&0xff00)|irqCache;
+        else if(irqHighInput)irqCounter=(irqCounter&0xff)|(irqCache<<8);
+
+        if(irqEnabled)
         {
-            _irqCounter--;
-            if(_irqCounter==0xffff)
+            irqCounter++;
+            if(irqCounter==0)
             {
                 _console->GetCpu()->SetIrqSource(IRQSource::External);
-                _irqRunning=false;
+                irqEnabled=false;
             }
         }
     }
@@ -131,36 +141,41 @@ class WaitWithoutCycles:public BaseMapper
             }
             case 5:
             {
-                if(_irqEnabled==false)_irqCache=value;
-                break;
-            }
-            case 6:
-            {
-                switch(value&0x01)
+                switch(value&0x03)
                 {
                     case 0:
                     {
-                        if(_irqEnabled==false)_irqCounter=(_irqCounter&0xff00)|_irqCache;
+                        irqLowInput=true;
+                        irqHighInput=false;
                         break;
                     }
                     case 1:
                     {
-                        if(_irqEnabled==false)
-                        {
-                            _irqCounter=(_irqCounter&0xff)|(_irqCache<<8);
-                            _irqRunning=true;
-                            _irqEnabled=true;
-                        }
+                        irqLowInput=false;
+                        irqHighInput=true;
                         break;
                     }
+                    case 2:
+                    {
+                        irqLowInput=false;
+                        irqHighInput=false;
+                        irqEnabled=true;
+                        break;
+                    }
+                    case 3:
+                        break;
                 }
+                break;
+            }
+            case 6:
+            {
+                irqCache=value;
                 break;
             }
             case 7:
             {
-                _irqRunning=false;
-                _irqEnabled=false;
-                _irqCounter=0;
+                irqEnabled=false;
+                irqCounter=0;
                 _console->GetCpu()->ClearIrqSource(IRQSource::External);
                 break;
             }

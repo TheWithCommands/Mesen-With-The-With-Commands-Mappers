@@ -10,4 +10,6 @@ There is no change, just add the Mapper designed by myself.
 
 [T.W.C. Wait Without Cycles](https://oshwhub.com/the-with-commands/wait-without-cycles), Mapper 573
 
+T.W.C. Wait Without Cycles 2, Mapper 574, Designed the cartridge PCB, but not yet produced
+
 To view the Readme of Mesen, click [here](https://github.com/SourMesen/Mesen/blob/master/README.md).

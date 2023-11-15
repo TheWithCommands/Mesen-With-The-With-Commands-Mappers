@@ -8,4 +8,6 @@
 
 [T.W.C. Wait Without Cycles](https://oshwhub.com/the-with-commands/wait-without-cycles)，Mapper 573
 
+T.W.C. Wait Without Cycles 2，Mapper 574，已设计出卡带PCB，但尚未制作
+
 查看Mesen的Readme文档，请点击[此处](https://github.com/SourMesen/Mesen/blob/master/README.md)。

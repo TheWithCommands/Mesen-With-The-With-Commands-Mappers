@@ -27,9 +27,9 @@ class WaitWithoutCycles:public BaseMapper
 
         irqCounter=(GetPowerOnByte()<<8)+GetPowerOnByte();
         irqCache=GetPowerOnByte();
-        irqLowInput=GetPowerOnByte()%1;
-        irqHighInput=GetPowerOnByte()%1;
-        irqEnabled=GetPowerOnByte()%1;
+        irqLowInput=GetPowerOnByte()%2;
+        irqHighInput=GetPowerOnByte()%2;
+        irqEnabled=GetPowerOnByte()%2;
 
         switch(_romInfo.NesHeader.Byte6&0x09)
         {

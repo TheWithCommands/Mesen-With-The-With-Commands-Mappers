@@ -10,6 +10,31 @@ class WaitWithoutCycles2:public BaseMapper
         bool irqLowInput,irqHighInput;
         bool irqEnabled;
 
+    private:
+        bool chr0000RangeUseUpper;
+        bool chr1000RangeUseUpper;
+        uint8_t chrBank0Cache;
+        uint8_t chrBank1Cache;
+        uint8_t chrBank2Cache;
+        uint8_t chrBank3Cache;
+        uint8_t chrBank4Cache;
+        uint8_t chrBank5Cache;
+        uint8_t chrBank6Cache;
+        uint8_t chrBank7Cache;
+
+    private:
+        void submitChr()
+        {
+            SelectCHRPage(0,chrBank0Cache+(chr0000RangeUseUpper?0x0100:0x0000));
+            SelectCHRPage(1,chrBank1Cache+(chr0000RangeUseUpper?0x0100:0x0000));
+            SelectCHRPage(2,chrBank2Cache+(chr0000RangeUseUpper?0x0100:0x0000));
+            SelectCHRPage(3,chrBank3Cache+(chr0000RangeUseUpper?0x0100:0x0000));
+            SelectCHRPage(4,chrBank4Cache+(chr1000RangeUseUpper?0x0100:0x0000));
+            SelectCHRPage(5,chrBank5Cache+(chr1000RangeUseUpper?0x0100:0x0000));
+            SelectCHRPage(6,chrBank6Cache+(chr1000RangeUseUpper?0x0100:0x0000));
+            SelectCHRPage(7,chrBank7Cache+(chr1000RangeUseUpper?0x0100:0x0000));
+        }
+
     protected:
         virtual uint16_t GetPRGPageSize() override {return 0x2000;}
         virtual uint16_t GetCHRPageSize() override {return 0x0400;}
@@ -17,20 +42,21 @@ class WaitWithoutCycles2:public BaseMapper
 
     void InitMapper() override
     {
-        irqCache=GetPowerOnByte()*2; //Temporary, will GetPowerOnByte() again after use
-        SelectPRGPage(0,irqCache);
-        SelectPRGPage(1,irqCache+1);
+        SelectPrgPage2x(0,GetPowerOnByte()*2);
         SelectPRGPage(2,GetPowerOnByte());
         SelectPRGPage(3,-1);
 
-        SelectCHRPage(0,GetPowerOnByte());
-        SelectCHRPage(1,GetPowerOnByte());
-        SelectCHRPage(2,GetPowerOnByte());
-        SelectCHRPage(3,GetPowerOnByte());
-        SelectCHRPage(4,GetPowerOnByte());
-        SelectCHRPage(5,GetPowerOnByte());
-        SelectCHRPage(6,GetPowerOnByte());
-        SelectCHRPage(7,GetPowerOnByte());
+        chr0000RangeUseUpper=GetPowerOnByte()%2;
+        chr1000RangeUseUpper=GetPowerOnByte()%2;
+        chrBank0Cache=GetPowerOnByte();
+        chrBank1Cache=GetPowerOnByte();
+        chrBank2Cache=GetPowerOnByte();
+        chrBank3Cache=GetPowerOnByte();
+        chrBank4Cache=GetPowerOnByte();
+        chrBank5Cache=GetPowerOnByte();
+        chrBank6Cache=GetPowerOnByte();
+        chrBank7Cache=GetPowerOnByte();
+        submitChr();
 
         irqCounter=(GetPowerOnByte()<<8)+GetPowerOnByte();
         irqCache=GetPowerOnByte();
@@ -79,7 +105,7 @@ class WaitWithoutCycles2:public BaseMapper
     void StreamState(bool saving) override
     {
         BaseMapper::StreamState(saving);
-        Stream(irqCounter,irqCache,irqLowInput,irqHighInput,irqEnabled);
+        Stream(irqCounter,irqCache,irqLowInput,irqHighInput,irqEnabled,chr0000RangeUseUpper,chr1000RangeUseUpper,chrBank0Cache,chrBank1Cache,chrBank2Cache,chrBank3Cache,chrBank4Cache,chrBank5Cache,chrBank6Cache,chrBank7Cache);
     }
 
     void ProcessCpuClock() override
@@ -104,8 +130,7 @@ class WaitWithoutCycles2:public BaseMapper
         {
             case 0:
             {
-                SelectPRGPage(0,(value&0x1f)*2);
-                SelectPRGPage(1,(value&0x1f)*2+1);
+                SelectPrgPage2x(0,(value&0x1f)*2);
                 break;
             }
             case 1:
@@ -133,6 +158,9 @@ class WaitWithoutCycles2:public BaseMapper
                         break;
                     }
                 }
+                chr0000RangeUseUpper=value&0x04;
+                chr1000RangeUseUpper=value&0x08;
+                submitChr();
                 break;
             }
             case 3:
@@ -168,42 +196,50 @@ class WaitWithoutCycles2:public BaseMapper
             }
             case 8:
             {
-                SelectCHRPage(0,value);
+                chrBank0Cache=value;
+                submitChr();
                 break;
             }
             case 9:
             {
-                SelectCHRPage(1,value);
+                chrBank1Cache=value;
+                submitChr();
                 break;
             }
             case 10:
             {
-                SelectCHRPage(2,value);
+                chrBank2Cache=value;
+                submitChr();
                 break;
             }
             case 11:
             {
-                SelectCHRPage(3,value);
+                chrBank3Cache=value;
+                submitChr();
                 break;
             }
             case 12:
             {
-                SelectCHRPage(4,value);
+                chrBank4Cache=value;
+                submitChr();
                 break;
             }
             case 13:
             {
-                SelectCHRPage(5,value);
+                chrBank5Cache=value;
+                submitChr();
                 break;
             }
             case 14:
             {
-                SelectCHRPage(6,value);
+                chrBank6Cache=value;
+                submitChr();
                 break;
             }
             case 15:
             {
-                SelectCHRPage(7,value);
+                chrBank7Cache=value;
+                submitChr();
                 break;
             }
         }

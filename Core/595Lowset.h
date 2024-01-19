@@ -5,7 +5,7 @@
 class Lowset595:public BaseMapper
 {
     private:
-        uint8_t _595data=_romInfo.NesHeader.Byte6&0x01?0xc0:0x80;
+        uint8_t _595data; //Here, '_romInfo.NesHeader.Byte6' cannot be used, so its initialization is handled by 'InitMapper()'
         bool _595busSrclkTriggered=false;
         bool _595busRclkTriggered=false;
 
@@ -17,10 +17,7 @@ class Lowset595:public BaseMapper
             {
                 case 8:
                 case 9:
-                {
-                    SetMirroringType(MirroringType::FourScreens);
                     break;
-                }
                 default:
                 {
                     if(_595data&0x80)
@@ -46,6 +43,7 @@ class Lowset595:public BaseMapper
         SelectPRGPage(0,0);
         SelectPRGPage(1,-1);
 
+        _595data=_romInfo.NesHeader.Byte6&0x01?0xc0:0x80;
         set595Data();
     }
 

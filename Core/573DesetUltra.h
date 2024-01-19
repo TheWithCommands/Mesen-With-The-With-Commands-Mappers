@@ -8,7 +8,7 @@ class Deset573Ultra:public BaseMapper
         bool _chr0000Flag=false;
         bool _chr1000Flag=false;
         bool _mirrorModeFlag=true;
-        bool _mirrorModeData=_romInfo.NesHeader.Byte6&0x01?true:false;
+        bool _mirrorModeData; //Here, '_romInfo.NesHeader.Byte6' cannot be used, so its initialization is handled by 'InitMapper()'
         uint8_t chrCache=0;
 
     protected:
@@ -23,6 +23,8 @@ class Deset573Ultra:public BaseMapper
 
         SelectCHRPage(0,0);
         SelectCHRPage(1,1);
+
+        _mirrorModeData=_romInfo.NesHeader.Byte6&0x01?true:false;
     }
 
     void StreamState(bool saving) override

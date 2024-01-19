@@ -5,7 +5,9 @@
 class Lowset595:public BaseMapper
 {
     private:
-        uint8_t _595data;
+        uint8_t _595data=_romInfo.NesHeader.Byte6&0x01?0xc0:0x80;
+        bool _595busSrclkTriggered=false;
+        bool _595busRclkTriggered=false;
 
     private:
         void set595Data()
@@ -41,17 +43,16 @@ class Lowset595:public BaseMapper
 
     void InitMapper() override
     {
-        SelectPRGPage(0,GetPowerOnByte());
+        SelectPRGPage(0,0);
         SelectPRGPage(1,-1);
 
-        _595data=GetPowerOnByte();
         set595Data();
     }
 
     void StreamState(bool saving) override
     {
         BaseMapper::StreamState(saving);
-        Stream(_595data);
+        Stream(_595data,_595busSrclkTriggered,_595busRclkTriggered);
     }
 
     #define _595busSer 0x20
@@ -63,9 +64,28 @@ class Lowset595:public BaseMapper
         SelectPRGPage(0,value&0x1f);
         if(value&_595busSrclk)
         {
-            _595data<<=1;
-            _595data+=(value&_595busSer)>>5;
+            if(_595busSrclkTriggered==false)
+            {
+                _595data<<=1;
+                _595data+=(value&_595busSer)>>5;
+                _595busSrclkTriggered=true;
+            }
         }
-        if(value&_595busRclk)set595Data();
+        else
+        {
+            _595busSrclkTriggered=false;
+        }
+        if(value&_595busRclk)
+        {
+            if(_595busRclkTriggered==false)
+            {
+                set595Data();
+                _595busRclkTriggered=true;
+            }
+        }
+        else
+        {
+            _595busRclkTriggered=false;
+        }
     }
 };

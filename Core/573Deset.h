@@ -11,25 +11,10 @@ class Deset573:public BaseMapper
 
     void InitMapper() override
     {
-        SelectPRGPage(0,GetPowerOnByte());
+        SelectPRGPage(0,0);
         SelectPRGPage(1,-1);
 
-        SelectCHRPage(0,GetPowerOnByte());
-
-        switch(_romInfo.NesHeader.Byte6&0x09)
-        {
-            case 8:
-            case 9:
-            {
-                SetMirroringType(MirroringType::FourScreens);
-                break;
-            }
-            default:
-            {
-                SetMirroringType(GetPowerOnByte()%2?MirroringType::Vertical:MirroringType::Horizontal);
-                break;
-            }
-        }
+        SelectCHRPage(0,0);
     }
 
     void WriteRegister(uint16_t addr,uint8_t value) override

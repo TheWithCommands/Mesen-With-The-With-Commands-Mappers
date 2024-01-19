@@ -5,11 +5,11 @@
 class Deset573Ultra:public BaseMapper
 {
     private:
-        bool _chr0000Flag;
-        bool _chr1000Flag;
-        bool _mirrorModeFlag;
-        bool _mirrorModeData;
-        uint8_t chrCache;
+        bool _chr0000Flag=false;
+        bool _chr1000Flag=false;
+        bool _mirrorModeFlag=true;
+        bool _mirrorModeData=_romInfo.NesHeader.Byte6&0x01?true:false;
+        uint8_t chrCache=0;
 
     protected:
         virtual uint16_t GetPRGPageSize() override {return 0x4000;}
@@ -18,48 +18,11 @@ class Deset573Ultra:public BaseMapper
 
     void InitMapper() override
     {
-        SelectPRGPage(0,GetPowerOnByte());
+        SelectPRGPage(0,0);
         SelectPRGPage(1,-1);
 
-        SelectCHRPage(0,GetPowerOnByte());
-        SelectCHRPage(1,GetPowerOnByte());
-
-        switch(_romInfo.NesHeader.Byte6&0x09)
-        {
-            case 8:
-            case 9:
-            {
-                SetMirroringType(MirroringType::FourScreens);
-                break;
-            }
-            default:
-            {
-                switch(GetPowerOnByte()%4)
-                {
-                    case 0:
-                    {
-                        SetMirroringType(MirroringType::ScreenAOnly);
-                        break;
-                    }
-                    case 1:
-                    {
-                        SetMirroringType(MirroringType::ScreenBOnly);
-                        break;
-                    }
-                    case 2:
-                    {
-                        SetMirroringType(MirroringType::Horizontal);
-                        break;
-                    }
-                    case 3:
-                    {
-                        SetMirroringType(MirroringType::Vertical);
-                        break;
-                    }
-                }
-                break;
-            }
-        }
+        SelectCHRPage(0,0);
+        SelectCHRPage(1,1);
     }
 
     void StreamState(bool saving) override

@@ -17,56 +17,19 @@ class WaitWithoutCycles:public BaseMapper
 
     void InitMapper() override
     {
-        SelectPRGPage(0,GetPowerOnByte());
+        SelectPRGPage(0,0);
         SelectPRGPage(1,-1);
 
-        SelectCHRPage(0,GetPowerOnByte());
-        SelectCHRPage(1,GetPowerOnByte());
-        SelectCHRPage(2,GetPowerOnByte());
-        SelectCHRPage(3,GetPowerOnByte());
+        SelectCHRPage(0,0);
+        SelectCHRPage(1,1);
+        SelectCHRPage(2,2);
+        SelectCHRPage(3,3);
 
         irqCounter=(GetPowerOnByte()<<8)+GetPowerOnByte();
         irqCache=GetPowerOnByte();
         irqLowInput=GetPowerOnByte()%2;
         irqHighInput=GetPowerOnByte()%2;
         irqEnabled=GetPowerOnByte()%2;
-
-        switch(_romInfo.NesHeader.Byte6&0x09)
-        {
-            case 8:
-            case 9:
-            {
-                SetMirroringType(MirroringType::FourScreens);
-                break;
-            }
-            default:
-            {
-                switch(GetPowerOnByte()%4)
-                {
-                    case 0:
-                    {
-                        SetMirroringType(MirroringType::ScreenAOnly);
-                        break;
-                    }
-                    case 1:
-                    {
-                        SetMirroringType(MirroringType::ScreenBOnly);
-                        break;
-                    }
-                    case 2:
-                    {
-                        SetMirroringType(MirroringType::Horizontal);
-                        break;
-                    }
-                    case 3:
-                    {
-                        SetMirroringType(MirroringType::Vertical);
-                        break;
-                    }
-                }
-                break;
-            }
-        }
     }
 
     void StreamState(bool saving) override

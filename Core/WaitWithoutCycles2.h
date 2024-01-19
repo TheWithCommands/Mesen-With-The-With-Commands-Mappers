@@ -11,16 +11,16 @@ class WaitWithoutCycles2:public BaseMapper
         bool irqEnabled;
 
     private:
-        bool chr0000RangeUseUpper;
-        bool chr1000RangeUseUpper;
-        uint8_t chrBank0Cache;
-        uint8_t chrBank1Cache;
-        uint8_t chrBank2Cache;
-        uint8_t chrBank3Cache;
-        uint8_t chrBank4Cache;
-        uint8_t chrBank5Cache;
-        uint8_t chrBank6Cache;
-        uint8_t chrBank7Cache;
+        bool chr0000RangeUseUpper=false;
+        bool chr1000RangeUseUpper=false;
+        uint8_t chrBank0Cache=0;
+        uint8_t chrBank1Cache=1;
+        uint8_t chrBank2Cache=2;
+        uint8_t chrBank3Cache=3;
+        uint8_t chrBank4Cache=4;
+        uint8_t chrBank5Cache=5;
+        uint8_t chrBank6Cache=6;
+        uint8_t chrBank7Cache=7;
 
     private:
         void submitChr()
@@ -42,20 +42,10 @@ class WaitWithoutCycles2:public BaseMapper
 
     void InitMapper() override
     {
-        SelectPrgPage2x(0,GetPowerOnByte()*2);
-        SelectPRGPage(2,GetPowerOnByte());
+        SelectPrgPage2x(0,0);
+        SelectPRGPage(2,0);
         SelectPRGPage(3,-1);
 
-        chr0000RangeUseUpper=GetPowerOnByte()%2;
-        chr1000RangeUseUpper=GetPowerOnByte()%2;
-        chrBank0Cache=GetPowerOnByte();
-        chrBank1Cache=GetPowerOnByte();
-        chrBank2Cache=GetPowerOnByte();
-        chrBank3Cache=GetPowerOnByte();
-        chrBank4Cache=GetPowerOnByte();
-        chrBank5Cache=GetPowerOnByte();
-        chrBank6Cache=GetPowerOnByte();
-        chrBank7Cache=GetPowerOnByte();
         submitChr();
 
         irqCounter=(GetPowerOnByte()<<8)+GetPowerOnByte();
@@ -63,43 +53,6 @@ class WaitWithoutCycles2:public BaseMapper
         irqLowInput=GetPowerOnByte()%2;
         irqHighInput=GetPowerOnByte()%2;
         irqEnabled=GetPowerOnByte()%2;
-
-        switch(_romInfo.NesHeader.Byte6&0x09)
-        {
-            case 8:
-            case 9:
-            {
-                SetMirroringType(MirroringType::FourScreens);
-                break;
-            }
-            default:
-            {
-                switch(GetPowerOnByte()%4)
-                {
-                    case 0:
-                    {
-                        SetMirroringType(MirroringType::ScreenAOnly);
-                        break;
-                    }
-                    case 1:
-                    {
-                        SetMirroringType(MirroringType::ScreenBOnly);
-                        break;
-                    }
-                    case 2:
-                    {
-                        SetMirroringType(MirroringType::Horizontal);
-                        break;
-                    }
-                    case 3:
-                    {
-                        SetMirroringType(MirroringType::Vertical);
-                        break;
-                    }
-                }
-                break;
-            }
-        }
     }
 
     void StreamState(bool saving) override

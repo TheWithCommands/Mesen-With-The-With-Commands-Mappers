@@ -4,6 +4,10 @@
 
 class Deset573:public BaseMapper
 {
+    private:
+        bool prg_le_cooldown=false;
+        bool chr_le_cooldown=false;
+
     protected:
         virtual uint16_t GetPRGPageSize() override {return 0x4000;}
         virtual uint16_t GetCHRPageSize() override {return 0x2000;}
@@ -17,9 +21,15 @@ class Deset573:public BaseMapper
         SelectCHRPage(0,0);
     }
 
+    void StreamState(bool saving) override
+    {
+        BaseMapper::StreamState(saving);
+        Stream(prg_le_cooldown,chr_le_cooldown);
+    }
+
     void WriteRegister(uint16_t addr,uint8_t value) override
     {
-        if(value&0x40)
+        if((value&0x40)||prg_le_cooldown)
         {
             SelectPRGPage(0,value&0x1f);
 
@@ -35,6 +45,9 @@ class Deset573:public BaseMapper
                 }
             }
         }
-        if(value&0x80)SelectCHRPage(0,value&0x3f);
+        if((value&0x80)||chr_le_cooldown)SelectCHRPage(0,value&0x3f);
+
+        prg_le_cooldown=value&0x40;
+        chr_le_cooldown=value&0x80;
     }
 };

@@ -6,9 +6,9 @@ There is no change, just add the Mapper designed by myself.
 
 [573 Deset](https://oshwhub.com/the-with-commands/512-h-v-cart), Mapper 571
 
-[573 Deset Ultra](https://oshwhub.com/the-with-commands/573-deset), Mapper 572
+[573 Deset Ultra](https://oshwhub.com/the-with-commands/573-deset-ultra-redesign), Mapper 572
 
-[T.W.C. Wait Without Cycles](https://oshwhub.com/the-with-commands/wait-without-cycles), Mapper 573
+[T.W.C. Wait Without Cycles](https://oshwhub.com/the-with-commands/wait-without-cycles-redesign), Mapper 573
 
 T.W.C. Wait Without Cycles 2, Mapper 574, Not yet sampled
 

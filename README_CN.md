@@ -8,6 +8,6 @@
 
 [T.W.C. Wait Without Cycles](https://oshwhub.com/the-with-commands/wait-without-cycles-redesign)，Mapper 573
 
-T.W.C. Wait Without Cycles 2，Mapper 574，尚未打样
+[T.W.C. Wait Without Cycles 2](https://oshwhub.com/the-with-commands/wait-without-cycles-2)，Mapper 574
 
 查看Mesen的Readme文档，请点击[此处](https://github.com/SourMesen/Mesen/blob/master/README.md)。
